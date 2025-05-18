@@ -10,7 +10,6 @@ export const TypeOrmTestingConfig = () => [
     dropSchema: true,
     entities: [RestauranteEntity, PlatoEntity],
     synchronize: true,
-    /*keepConnectionAlive: true */
   }),
   TypeOrmModule.forFeature([RestauranteEntity, PlatoEntity]),
 ];

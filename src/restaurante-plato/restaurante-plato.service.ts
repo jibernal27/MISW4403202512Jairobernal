@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { RestauranteEntity } from '../restaurante/restaurante.entity';
 import { PlatoEntity } from '../plato/plato.entity';
 import {
@@ -87,6 +87,25 @@ export class RestaurantePlatoService {
     platos: PlatoEntity[],
   ): Promise<RestauranteEntity> {
     const restaurante = await this.findRestauranteById(restauranteId);
+
+    const existingPlatos = await this.platoRepository.find({
+      where: { id: In(platos.map((plato) => plato.id)) },
+    });
+
+    const missingplatos = platos.filter(
+      (plato) =>
+        !existingPlatos.some((existingPlato) => existingPlato.id === plato.id),
+    );
+
+    if (missingplatos.length > 0) {
+      throw new BusinessLogicException(
+        `Platos with ids ${missingplatos
+          .map((plato) => plato.id)
+          .join(', ')} not found`,
+        BusinessError.NOT_FOUND,
+      );
+    }
+
     restaurante.platos = platos;
     return this.restauranteRepository.save(restaurante);
   }

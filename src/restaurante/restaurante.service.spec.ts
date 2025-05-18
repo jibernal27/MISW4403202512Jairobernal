@@ -4,8 +4,7 @@ import { Repository } from 'typeorm';
 import { TypeOrmTestingConfig } from '../shared/testing-utils/typeorm-testing-config';
 import { RestauranteEntity, TipoCocina } from './restaurante.entity';
 import { RestauranteService } from './restaurante.service';
-import { faker } from '@faker-js/faker';
-
+import { restauranteFactory } from '../shared/testing-utils/factories';
 describe('RestauranteService', () => {
   let service: RestauranteService;
   let repository: Repository<RestauranteEntity>;
@@ -28,13 +27,8 @@ describe('RestauranteService', () => {
     await repository.clear();
     restaurantesList = [];
     for (let i = 0; i < 5; i++) {
-      const restaurante: RestauranteEntity = await repository.save({
-        nombre: faker.company.name(),
-        direccion: faker.location.streetAddress(),
-        tipoCocina: faker.helpers.arrayElement(Object.values(TipoCocina)),
-        paginaWeb: faker.internet.url(),
-        platos: [],
-      });
+      const restaurante: RestauranteEntity =
+        await repository.save(restauranteFactory());
       restaurantesList.push(restaurante);
     }
   };
@@ -79,11 +73,7 @@ describe('RestauranteService', () => {
   it('create should return a new restaurante', async () => {
     const restaurante: RestauranteEntity = {
       id: '',
-      nombre: faker.company.name(),
-      direccion: faker.location.streetAddress(),
-      tipoCocina: faker.helpers.arrayElement(Object.values(TipoCocina)),
-      paginaWeb: faker.internet.url(),
-      platos: [],
+      ...restauranteFactory(),
     };
 
     const newRestaurante: RestauranteEntity | null =
@@ -105,12 +95,9 @@ describe('RestauranteService', () => {
 
   it('create should throw an exception for invalid tipoCocina', async () => {
     const restaurante: RestauranteEntity = {
+      ...restauranteFactory(),
       id: '',
-      nombre: faker.company.name(),
-      direccion: faker.location.streetAddress(),
       tipoCocina: 'INVALID' as TipoCocina,
-      paginaWeb: faker.internet.url(),
-      platos: [],
     };
     await expect(() => service.create(restaurante)).rejects.toHaveProperty(
       'message',
@@ -119,13 +106,12 @@ describe('RestauranteService', () => {
   });
 
   it('update should modify a restaurante', async () => {
+    const newData = restauranteFactory();
     const restaurante: RestauranteEntity = restaurantesList[0];
-    restaurante.nombre = 'Nuevo nombre';
-    restaurante.direccion = 'Nueva direccion';
-    restaurante.tipoCocina = faker.helpers.arrayElement(
-      Object.values(TipoCocina),
-    );
-    restaurante.paginaWeb = faker.internet.url();
+    restaurante.nombre = newData.nombre;
+    restaurante.direccion = newData.direccion;
+    restaurante.tipoCocina = newData.tipoCocina;
+    restaurante.paginaWeb = newData.paginaWeb;
 
     const updatedRestaurante: RestauranteEntity = await service.update(
       restaurante.id,

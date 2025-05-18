@@ -16,7 +16,10 @@ export class PlatoService {
   ) {}
 
   async findAll(): Promise<PlatoEntity[]> {
-    return this.platoRepository.find({ relations: ['restaurantes'] });
+    return this.platoRepository.find({
+      relations: ['restaurantes'],
+      order: { createdAt: 'DESC' },
+    });
   }
 
   async findOne(id: string): Promise<PlatoEntity> {
