@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { RestauranteEntity } from 'src/restaurante/restaurante.entity';
+import { RestauranteEntity } from '../restaurante/restaurante.entity';
 
 export enum CategoriaPlato {
   ENTRADA = 'entrada',
@@ -26,15 +26,15 @@ export class PlatoEntity {
   @Column()
   descripcion: string;
 
-  @Column()
-  precio: number;
-
   @Column({
     type: 'decimal',
     precision: 10,
     scale: 2,
   })
-  categoria: CategoriaPlato;
+  precio: number;
+
+  @Column()
+  categoria: string;
 
   @ManyToMany(() => RestauranteEntity, (restaurante) => restaurante.platos)
   restaurantes: RestauranteEntity[];

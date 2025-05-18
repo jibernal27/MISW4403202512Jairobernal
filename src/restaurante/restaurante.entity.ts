@@ -8,7 +8,7 @@ import {
   JoinTable,
 } from 'typeorm';
 
-import { PlatoEntity } from 'src/plato/plato.entity';
+import { PlatoEntity } from '../plato/plato.entity';
 
 export enum TipoCocina {
   ITALIANA = 'Italiana',
@@ -29,11 +29,8 @@ export class RestauranteEntity {
   @Column()
   direccion: string;
 
-  @Column({
-    type: 'enum',
-    enum: TipoCocina,
-  })
-  tipoCocina: TipoCocina;
+  @Column()
+  tipoCocina: string;
 
   @Column()
   paginaWeb: string;

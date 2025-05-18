@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RestauranteEntity } from 'src/restaurante/restaurante.entity';
-import { PlatoEntity } from 'src/plato/plato.entity';
+import { RestauranteEntity } from '../restaurante/restaurante.entity';
+import { PlatoEntity } from '../plato/plato.entity';
 import {
   BusinessError,
   BusinessLogicException,
-} from 'src/shared/errors/business-errors';
+} from '../shared/errors/business-errors';
 
 @Injectable()
 export class RestaurantePlatoService {

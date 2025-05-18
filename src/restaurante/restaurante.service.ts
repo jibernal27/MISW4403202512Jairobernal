@@ -6,7 +6,7 @@ import { RestauranteEntity, TipoCocina } from './restaurante.entity';
 import {
   BusinessError,
   BusinessLogicException,
-} from 'src/shared/errors/business-errors';
+} from '../shared/errors/business-errors';
 
 @Injectable()
 export class RestauranteService {
@@ -16,7 +16,10 @@ export class RestauranteService {
   ) {}
 
   async findAll(): Promise<RestauranteEntity[]> {
-    return this.restauranteRepository.find({ relations: ['platos'] });
+    return this.restauranteRepository.find({
+      relations: ['platos'],
+      order: { createdAt: 'DESC' },
+    });
   }
 
   async findOne(id: string): Promise<RestauranteEntity> {
@@ -55,8 +58,11 @@ export class RestauranteService {
     await this.restauranteRepository.remove(restaurante);
   }
 
-  validateTipoCocina(tipoCocina?: TipoCocina) {
-    if (!tipoCocina || !Object.values(TipoCocina).includes(tipoCocina)) {
+  validateTipoCocina(tipoCocina?: string) {
+    if (
+      !tipoCocina ||
+      !Object.values(TipoCocina).includes(tipoCocina as unknown as TipoCocina)
+    ) {
       throw new BusinessLogicException(
         `tipoCocina ${tipoCocina} is not valid, it must be one of ${Object.values(
           TipoCocina,

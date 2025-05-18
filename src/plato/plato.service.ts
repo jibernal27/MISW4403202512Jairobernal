@@ -6,7 +6,7 @@ import { PlatoEntity, CategoriaPlato } from './plato.entity';
 import {
   BusinessError,
   BusinessLogicException,
-} from 'src/shared/errors/business-errors';
+} from '../shared/errors/business-errors';
 
 @Injectable()
 export class PlatoService {
@@ -54,8 +54,11 @@ export class PlatoService {
     await this.platoRepository.remove(plato);
   }
 
-  validateCategoria(categoria?: CategoriaPlato) {
-    if (!categoria || !Object.values(CategoriaPlato).includes(categoria)) {
+  validateCategoria(categoria?: string) {
+    if (
+      !categoria ||
+      !Object.values(CategoriaPlato).includes(categoria as CategoriaPlato)
+    ) {
       throw new BusinessLogicException(
         `categoria ${categoria} is not valid, it must be one of ${Object.values(
           CategoriaPlato,
