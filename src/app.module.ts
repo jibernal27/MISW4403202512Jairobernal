@@ -23,7 +23,7 @@ import { PlatoEntity } from './plato/plato.entity';
       password: process.env.POSTGRES_PASSWORD || 'postgres',
       database: process.env.POSTGRES_DB || 'restaurantes',
       entities: [RestauranteEntity, PlatoEntity],
-      dropSchema: true,
+      dropSchema: false,
       synchronize: true,
     }),
   ],

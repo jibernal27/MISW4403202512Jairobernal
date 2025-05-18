@@ -1,0 +1,759 @@
+{
+	"info": {
+		"_postman_id": "4865231f-53ed-4b26-a0ad-41c816055220",
+		"name": "Restaurantes-Platos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2331986"
+	},
+	"item": [
+		{
+			"name": "Crear Restaurante valido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"pm.globals.set(\"restaurante_id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"   pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Restaurante Italiano\",\n    \"direccion\": \"Calle 123 #45-67\",\n    \"tipoCocina\": \"Italiana\",\n    \"paginaWeb\": \"https://www.restauranteitaliano.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/restaurants/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"restaurants",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Plato valido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"pm.globals.set(\"plato_id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"   pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Pizza Margherita\",\n    \"descripcion\": \"Pizza tradicional italiana con tomate, mozzarella y albahaca.\",\n    \"precio\": 25000,\n    \"categoria\": \"plato fuerte\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/dishes/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"dishes",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Plato valido 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"pm.globals.set(\"plato_id_2\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"   pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Pizza Margherita\",\n    \"descripcion\": \"Pizza tradicional italiana con tomate, mozzarella y albahaca.\",\n    \"precio\": 25000,\n    \"categoria\": \"plato fuerte\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/dishes/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"dishes",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Asociar un plato a un restaurante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"   pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Restaurante Italiano\",\n    \"direccion\": \"Calle 123 #45-67\",\n    \"tipoCocina\": \"Italiana\",\n    \"paginaWeb\": \"https://www.restauranteitaliano.com\"\n}"
+				},
+				"url": {
+					"raw": "{{API_URL}}/restaurants/:restaurant_id/dishes/:dish_id",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"restaurants",
+						":restaurant_id",
+						"dishes",
+						":dish_id"
+					],
+					"variable": [
+						{
+							"key": "restaurant_id",
+							"value": "{{restaurante_id}}"
+						},
+						{
+							"key": "dish_id",
+							"value": "{{plato_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Asociar un plato que no existe a un restaurante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Get expected error message with UUID\", function () {",
+							"    const data = pm.response.json();",
+							"    const regex = /^Plato with id [0-9a-fA-F-]{36} not found$/;",
+							"",
+							"    pm.expect(data.message).to.match(regex);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Restaurante Italiano\",\n    \"direccion\": \"Calle 123 #45-67\",\n    \"tipoCocina\": \"Italiana\",\n    \"paginaWeb\": \"https://www.restauranteitaliano.com\"\n}"
+				},
+				"url": {
+					"raw": "{{API_URL}}/restaurants/:restaurant_id/dishes/:dish_id",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"restaurants",
+						":restaurant_id",
+						"dishes",
+						":dish_id"
+					],
+					"variable": [
+						{
+							"key": "restaurant_id",
+							"value": "{{restaurante_id}}"
+						},
+						{
+							"key": "dish_id",
+							"value": "{{$randomUUID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Asociar un plato  un restaurante que no existe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Get expected error message with UUID\", function () {",
+							"    const data = pm.response.json();",
+							"    const regex = /^Restaurante with id [0-9a-fA-F-]{36} not found$/;",
+							"",
+							"    pm.expect(data.message).to.match(regex);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Restaurante Italiano\",\n    \"direccion\": \"Calle 123 #45-67\",\n    \"tipoCocina\": \"Italiana\",\n    \"paginaWeb\": \"https://www.restauranteitaliano.com\"\n}"
+				},
+				"url": {
+					"raw": "{{API_URL}}/restaurants/:restaurant_id/dishes/:dish_id",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"restaurants",
+						":restaurant_id",
+						"dishes",
+						":dish_id"
+					],
+					"variable": [
+						{
+							"key": "restaurant_id",
+							"value": "{{$randomUUID}}"
+						},
+						{
+							"key": "dish_id",
+							"value": "{{plato_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener todos los platos de un restaurante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Number of platos > ' + 0, function () {",
+							"   var data = pm.response.json()",
+							"   pm.expect(data.length).to.greaterThan(0)",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"   pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Restaurante Italiano\",\n    \"direccion\": \"Calle 123 #45-67\",\n    \"tipoCocina\": \"Italiana\",\n    \"paginaWeb\": \"https://www.restauranteitaliano.com\"\n}"
+				},
+				"url": {
+					"raw": "{{API_URL}}/restaurants/:restaurant_id/dishes/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"restaurants",
+						":restaurant_id",
+						"dishes",
+						""
+					],
+					"variable": [
+						{
+							"key": "restaurant_id",
+							"value": "{{restaurante_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener todos los platos de un restaurante que no existe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Get expected error message with UUID\", function () {",
+							"    const data = pm.response.json();",
+							"    const regex = /^Restaurante with id [0-9a-fA-F-]{36} not found$/;",
+							"",
+							"    pm.expect(data.message).to.match(regex);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Restaurante Italiano\",\n    \"direccion\": \"Calle 123 #45-67\",\n    \"tipoCocina\": \"Italiana\",\n    \"paginaWeb\": \"https://www.restauranteitaliano.com\"\n}"
+				},
+				"url": {
+					"raw": "{{API_URL}}/restaurants/:restaurant_id/dishes/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"restaurants",
+						":restaurant_id",
+						"dishes",
+						""
+					],
+					"variable": [
+						{
+							"key": "restaurant_id",
+							"value": "{{$randomUUID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener plato asociado a restaurante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"   pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Restaurante Italiano\",\n    \"direccion\": \"Calle 123 #45-67\",\n    \"tipoCocina\": \"Italiana\",\n    \"paginaWeb\": \"https://www.restauranteitaliano.com\"\n}"
+				},
+				"url": {
+					"raw": "{{API_URL}}/restaurants/:restaurant_id/dishes/:dish_id/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"restaurants",
+						":restaurant_id",
+						"dishes",
+						":dish_id",
+						""
+					],
+					"variable": [
+						{
+							"key": "restaurant_id",
+							"value": "{{restaurante_id}}"
+						},
+						{
+							"key": "dish_id",
+							"value": "{{plato_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener plato no asociado a restaunrate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Get expected error message with UUID\", function () {",
+							"    const data = pm.response.json();",
+							"    const regex = /^Plato with id [0-9a-fA-F-]{36} is not associated with Restaurante [0-9a-fA-F-]{36}$/;",
+							"",
+							"    pm.expect(data.message).to.match(regex);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Restaurante Italiano\",\n    \"direccion\": \"Calle 123 #45-67\",\n    \"tipoCocina\": \"Italiana\",\n    \"paginaWeb\": \"https://www.restauranteitaliano.com\"\n}"
+				},
+				"url": {
+					"raw": "{{API_URL}}/restaurants/:restaurant_id/dishes/:dish_id/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"restaurants",
+						":restaurant_id",
+						"dishes",
+						":dish_id",
+						""
+					],
+					"variable": [
+						{
+							"key": "restaurant_id",
+							"value": "{{restaurante_id}}"
+						},
+						{
+							"key": "dish_id",
+							"value": "{{plato_id_2}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar los platos que están asociados a un restaurante.",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Number of platos > ' + 0, function () {",
+							"   var data = pm.response.json()",
+							"   pm.expect(data['platos'].length).to.greaterThan(0)",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"   pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"id\": \"{{plato_id_2}}\"\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/restaurants/:restaurant_id/dishes/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"restaurants",
+						":restaurant_id",
+						"dishes",
+						""
+					],
+					"variable": [
+						{
+							"key": "restaurant_id",
+							"value": "{{restaurante_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar los platos asociados a un restaurante, con un plato inexistente.",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Get expected error message with UUID\", function () {",
+							"    const data = pm.response.json();",
+							"    const regex = /^Platos with ids [0-9a-fA-F-]{36} not found$/;",
+							"",
+							"    pm.expect(data.message).to.match(regex);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"id\": \"{{plato_id_2}}\"\n    },\n    {\n         \"id\": \"{{$randomUUID}}\"\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/restaurants/:restaurant_id/dishes/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"restaurants",
+						":restaurant_id",
+						"dishes",
+						""
+					],
+					"variable": [
+						{
+							"key": "restaurant_id",
+							"value": "{{restaurante_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar un plato previamente asociado a un restaurante.",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"   pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Restaurante Italiano\",\n    \"direccion\": \"Calle 123 #45-67\",\n    \"tipoCocina\": \"Italiana\",\n    \"paginaWeb\": \"https://www.restauranteitaliano.com\"\n}"
+				},
+				"url": {
+					"raw": "{{API_URL}}/restaurants/:restaurant_id/dishes/:dish_id",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"restaurants",
+						":restaurant_id",
+						"dishes",
+						":dish_id"
+					],
+					"variable": [
+						{
+							"key": "restaurant_id",
+							"value": "{{restaurante_id}}"
+						},
+						{
+							"key": "dish_id",
+							"value": "{{plato_id_2}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar un plato que no estaba previamente asociado a un restaurante.",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Get expected error message with UUID\", function () {",
+							"    const data = pm.response.json();",
+							"    const regex = /^Plato with id [0-9a-fA-F-]{36} is not associated with Restaurante [0-9a-fA-F-]{36}$/;",
+							"",
+							"    pm.expect(data.message).to.match(regex);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Restaurante Italiano\",\n    \"direccion\": \"Calle 123 #45-67\",\n    \"tipoCocina\": \"Italiana\",\n    \"paginaWeb\": \"https://www.restauranteitaliano.com\"\n}"
+				},
+				"url": {
+					"raw": "{{API_URL}}/restaurants/:restaurant_id/dishes/:dish_id",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"restaurants",
+						":restaurant_id",
+						"dishes",
+						":dish_id"
+					],
+					"variable": [
+						{
+							"key": "restaurant_id",
+							"value": "{{restaurante_id}}"
+						},
+						{
+							"key": "dish_id",
+							"value": "{{plato_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_URL",
+			"value": "localhost:3000/api/v1",
+			"type": "string"
+		}
+	]
+}
